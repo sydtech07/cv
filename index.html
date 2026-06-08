@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<!-- ============================================================
+  JUDUL TAB BROWSER — ganti sesuai nama kamu
+============================================================ -->
+<title>Rasyd Azron — Full Stack Developer</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* ============================================================
+    WARNA UTAMA — ubah --accent buat ganti warna tema utama
+    contoh biru    : #3b82f6
+    contoh hijau   : #10b981
+    contoh ungu    : #8b5cf6
+    contoh orange  : #f97316
+  ============================================================ */
+  --accent:#3b82f6;
+  --accent2:#06b6d4;
+
+  /* Background & surface — jangan diubah kalau mau tetap dark */
+  --bg:#060a12;
+  --surface:#0c1220;
+  --surface2:#101826;
+  --border:rgba(255,255,255,.08);
+  --text:#e2e8f0;
+  --muted:#64748b;
+}
+
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  font-size:16px;
+  line-height:1.7;
+  overflow-x:hidden;
+}
+
+/* ===== SCANLINE OVERLAY — hapus ::before ini kalau gak suka efek scanline ===== */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,.03) 2px,
+    rgba(0,0,0,.03) 4px
+  );
+  pointer-events:none;
+  z-index:999;
+}
+
+/* ===== GRID DOT BACKGROUND — hapus kalau mau lebih polos ===== */
+body::after{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:radial-gradient(rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size:32px 32px;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ===== GLOW BLOBS — ini yang bikin ada efek cahaya di pojok ===== */
+.blob{position:fixed;border-radius:50%;filter:blur(140px);pointer-events:none;z-index:0}
+/* Blob kanan atas */
+.blob-1{width:700px;height:700px;background:var(--accent);opacity:.07;top:-250px;right:-200px}
+/* Blob kiri bawah */
+.blob-2{width:500px;height:500px;background:var(--accent2);opacity:.06;bottom:-100px;left:-150px}
+/* Blob tengah — subtle banget */
+.blob-3{width:300px;height:300px;background:#8b5cf6;opacity:.04;top:50%;left:50%;transform:translate(-50%,-50%)}
+
+/* ===== NAV ===== */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:0 2rem;height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(24px);
+  background:rgba(6,10,18,.85);
+}
+
+/* ============================================================
+  LOGO NAVBAR — ganti teks "RASYD" dan ".DEV" sesuai brand kamu
+============================================================ */
+.logo{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;
+  letter-spacing:.08em;color:var(--text);text-decoration:none;
+  display:flex;align-items:center;gap:2px;
+}
+.logo .dot{color:var(--accent);font-size:1.4rem;line-height:1}
+
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{
+  color:var(--muted);text-decoration:none;font-size:.82rem;
+  font-weight:500;letter-spacing:.06em;text-transform:uppercase;
+  transition:color .2s;position:relative;padding-bottom:2px;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:0;left:0;width:0;height:1px;
+  background:var(--accent);transition:width .3s;
+}
+.nav-links a:hover{color:var(--text)}
+.nav-links a:hover::after{width:100%}
+
+.lang-toggle{display:flex;gap:.4rem}
+.lang-btn{
+  background:none;border:1px solid var(--border);color:var(--muted);
+  padding:.25rem .65rem;border-radius:4px;cursor:pointer;
+  font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.05em;
+  transition:all .2s;
+}
+.lang-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(59,130,246,.08)}
+
+/* ===== SECTIONS ===== */
+section{position:relative;z-index:1;padding:8rem 0 4rem}
+.container{max-width:1100px;margin:0 auto;padding:0 2rem}
+
+/* ===== SECTION HEADER ===== */
+.section-eyebrow{
+  font-family:'DM Mono',monospace;font-size:.68rem;
+  letter-spacing:.2em;color:var(--accent);
+  text-transform:uppercase;margin-bottom:.6rem;
+  display:flex;align-items:center;gap:.75rem;
+}
+.section-eyebrow::after{content:'';flex:1;max-width:60px;height:1px;background:var(--accent);opacity:.4}
+.section-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(2rem,4vw,2.8rem);
+  font-weight:800;letter-spacing:-.03em;margin-bottom:3.5rem;
+}
+
+/* ===== HERO ===== */
+#home{
+  min-height:100vh;display:flex;align-items:center;
+  padding-top:64px;
+}
+
+/* Dekorasi garis horizontal di hero */
+#home::before{
+  content:'';position:absolute;
+  top:50%;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  opacity:.06;pointer-events:none;
+}
+
+.hero-tag{
+  display:inline-flex;align-items:center;gap:.6rem;
+  font-family:'DM Mono',monospace;font-size:.72rem;
+  letter-spacing:.2em;color:var(--accent);
+  text-transform:uppercase;margin-bottom:2rem;
+  border:1px solid rgba(59,130,246,.25);
+  padding:.3rem 1rem;border-radius:100px;
+  background:rgba(59,130,246,.06);
+}
+.hero-tag::before{content:'';width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite}
+
+/* ============================================================
+  NAMA BESAR DI HERO — ganti RASYD & AZRON
+============================================================ */
+.hero-name{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(3.5rem,9vw,7.5rem);
+  font-weight:800;line-height:.92;
+  letter-spacing:-.04em;
+  margin-bottom:1.75rem;
+}
+.hero-name .outline{
+  color:transparent;
+  -webkit-text-stroke:1.5px rgba(255,255,255,.18);
+}
+/* Efek gradient di nama pertama */
+.hero-name .filled{
+  background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,.7) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+/* ============================================================
+  DESKRIPSI SINGKAT DI HERO — ubah di bagian HTML bawah (data-key="heroDesc")
+  atau langsung di blok translations JS
+============================================================ */
+.hero-desc{
+  font-size:1.05rem;color:var(--muted);
+  max-width:480px;line-height:1.9;margin-bottom:2.5rem;
+}
+
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-primary{
+  background:var(--accent);color:#fff;
+  padding:.75rem 1.75rem;border-radius:6px;
+  text-decoration:none;font-weight:500;font-size:.9rem;
+  transition:all .25s;border:none;cursor:pointer;
+  letter-spacing:.02em;
+}
+.btn-primary:hover{background:#2563eb;transform:translateY(-2px);box-shadow:0 8px 24px rgba(59,130,246,.3)}
+.btn-ghost{
+  border:1px solid var(--border);color:var(--muted);
+  padding:.75rem 1.75rem;border-radius:6px;
+  text-decoration:none;font-weight:500;font-size:.9rem;
+  transition:all .25s;
+}
+.btn-ghost:hover{border-color:rgba(255,255,255,.2);color:var(--text)}
+
+/* Stats di bawah hero */
+.hero-stats{
+  display:flex;gap:3.5rem;margin-top:4rem;
+  padding-top:2rem;border-top:1px solid var(--border);
+}
+.stat-num{
+  font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.stat-label{font-size:.75rem;color:var(--muted);margin-top:.2rem;letter-spacing:.04em;text-transform:uppercase}
+
+/* Avatar / foto profil */
+.avatar-wrap{position:relative;display:flex;justify-content:center;align-items:center}
+.avatar-ring{
+  position:relative;width:300px;height:300px;
+  border-radius:50%;
+}
+/* Ring efek gradient rotating */
+.avatar-ring::before{
+  content:'';position:absolute;inset:-3px;border-radius:50%;
+  background:conic-gradient(var(--accent),var(--accent2),#8b5cf6,var(--accent));
+  opacity:.6;animation:spin 8s linear infinite;
+}
+.avatar-ring::after{
+  content:'';position:absolute;inset:0;border-radius:50%;
+  background:var(--bg);
+}
+
+/* ============================================================
+  FOTO PROFIL — ganti src="..." di tag <img> di bawah
+  Ukuran ideal: minimal 400x400px, format JPG/PNG
+  Contoh: src="foto_saya.jpg" atau URL langsung
+============================================================ */
+.avatar-ring img{
+  position:relative;z-index:1;
+  width:calc(100% - 8px);height:calc(100% - 8px);
+  border-radius:50%;object-fit:cover;
+  top:4px;left:4px;
+}
+
+/* Dekorasi sudut di sekitar avatar */
+.corner{position:absolute;width:20px;height:20px;border-color:var(--accent);border-style:solid;opacity:.5}
+.corner-tl{top:-10px;left:-10px;border-width:2px 0 0 2px}
+.corner-tr{top:-10px;right:-10px;border-width:2px 2px 0 0}
+.corner-bl{bottom:-10px;left:-10px;border-width:0 0 2px 2px}
+.corner-br{bottom:-10px;right:-10px;border-width:0 2px 2px 0}
+
+/* ===== ABOUT ===== */
+.about-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:5rem;align-items:center}
+.about-text p{color:var(--muted);margin-bottom:1.1rem;line-height:1.95}
+.about-lead{font-size:1.15rem!important;font-weight:500;color:var(--text)!important;margin-bottom:1.25rem!important}
+.tech-pills{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.75rem}
+.pill{
+  background:rgba(59,130,246,.07);
+  border:1px solid rgba(59,130,246,.18);
+  color:var(--accent);
+  padding:.3rem .85rem;border-radius:4px;
+  font-size:.78rem;font-family:'DM Mono',monospace;letter-spacing:.03em;
+}
+
+/* Stats box di kolom kanan about */
+.stats-box{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;padding:2rem;
+  display:grid;grid-template-columns:1fr 1fr;gap:1rem;
+}
+.stat-box-item{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:12px;padding:1.5rem 1rem;text-align:center;
+  transition:border-color .2s;
+}
+.stat-box-item:hover{border-color:rgba(59,130,246,.3)}
+.stat-box-item:last-child{grid-column:1/-1}
+.stat-box-num{
+  font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.stat-box-label{font-size:.75rem;color:var(--muted);margin-top:.3rem;letter-spacing:.04em;text-transform:uppercase}
+
+/* ===== SKILLS ===== */
+
+/* ============================================================
+  SKILLS — tambah/hapus .skill-chip di HTML sesuai keahlian kamu
+  Format: emoji icon + nama + level persen
+============================================================ */
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:1rem}
+.skill-chip{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;padding:1.5rem 1rem 1.25rem;
+  text-align:center;transition:all .25s;position:relative;overflow:hidden;
+}
+.skill-chip::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.skill-chip:hover{border-color:rgba(59,130,246,.3);transform:translateY(-3px)}
+.skill-chip:hover::before{opacity:1}
+.sk-icon{font-size:1.9rem;margin-bottom:.75rem;display:block}
+.sk-name{font-size:.88rem;font-weight:500;color:var(--text);margin-bottom:.2rem}
+.sk-level{font-size:.7rem;font-family:'DM Mono',monospace;color:var(--muted)}
+.sk-bar{height:2px;background:var(--border);border-radius:2px;margin-top:.75rem;overflow:hidden}
+.sk-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px}
+
+/* ===== EXPERIENCE / TIMELINE ===== */
+.timeline{position:relative;padding-left:2.5rem}
+.timeline::before{
+  content:'';position:absolute;left:.5px;top:0;bottom:0;
+  width:1px;background:linear-gradient(180deg,var(--accent),var(--accent2),transparent);
+  opacity:.3;
+}
+.tl-item{position:relative;margin-bottom:3rem;padding-bottom:3rem;border-bottom:1px solid var(--border)}
+.tl-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.tl-dot{
+  position:absolute;left:-2.9rem;top:.4rem;
+  width:13px;height:13px;border-radius:50%;
+  background:var(--accent);border:2px solid var(--bg);
+  box-shadow:0 0 0 4px rgba(59,130,246,.12),0 0 12px rgba(59,130,246,.3);
+}
+.tl-period{
+  font-family:'DM Mono',monospace;font-size:.68rem;
+  color:var(--accent);letter-spacing:.12em;
+  text-transform:uppercase;margin-bottom:.5rem;
+}
+.tl-title{
+  font-family:'Syne',sans-serif;font-size:1.2rem;
+  font-weight:700;margin-bottom:.25rem;letter-spacing:-.01em;
+}
+.tl-company{font-size:.88rem;color:var(--muted);margin-bottom:.85rem}
+.tl-desc{color:var(--muted);font-size:.9rem;margin-bottom:1rem;line-height:1.85}
+.tags{display:flex;flex-wrap:wrap;gap:.4rem}
+.tag{
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+  color:var(--muted);padding:.18rem .65rem;border-radius:4px;
+  font-size:.73rem;font-family:'DM Mono',monospace;
+}
+
+/* ===== PROJECTS ===== */
+
+/* ============================================================
+  PROJECT CARDS — tambah/hapus .proj-card di HTML
+  Setiap card punya: judul, deskripsi, tech tags, link demo & github
+============================================================ */
+.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.proj-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:18px;padding:1.75rem;
+  transition:all .25s;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+/* Garis warna di atas card saat hover */
+.proj-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  opacity:0;transition:opacity .3s;
+}
+.proj-card:hover{border-color:rgba(59,130,246,.25);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.proj-card:hover::before{opacity:1}
+.proj-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem}
+.proj-title{font-family:'Syne',sans-serif;font-size:1.08rem;font-weight:700;letter-spacing:-.01em}
+.proj-links{display:flex;gap:.6rem}
+.proj-links a{
+  width:30px;height:30px;border:1px solid var(--border);
+  border-radius:6px;display:flex;align-items:center;justify-content:center;
+  color:var(--muted);text-decoration:none;font-size:.85rem;
+  transition:all .2s;
+}
+.proj-links a:hover{border-color:var(--accent);color:var(--accent)}
+.proj-desc{color:var(--muted);font-size:.875rem;line-height:1.85;margin-bottom:1.25rem;flex:1}
+
+/* ===== CERTIFICATES ===== */
+
+/* ============================================================
+  SERTIFIKAT — tambah/hapus .cert-card di HTML
+  Isi: judul sertif, nama lembaga, tanggal, link
+============================================================ */
+.certs-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.cert-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:16px;padding:1.5rem;
+  display:flex;gap:1.25rem;align-items:flex-start;
+  transition:border-color .2s;
+}
+.cert-card:hover{border-color:rgba(59,130,246,.25)}
+.cert-icon{
+  width:46px;height:46px;min-width:46px;
+  background:rgba(59,130,246,.08);
+  border:1px solid rgba(59,130,246,.15);
+  border-radius:12px;display:flex;align-items:center;
+  justify-content:center;font-size:1.3rem;
+}
+.cert-title{font-size:.95rem;font-weight:600;margin-bottom:.3rem;line-height:1.4}
+.cert-issuer{font-size:.75rem;color:var(--accent);font-family:'DM Mono',monospace;margin-bottom:.2rem;letter-spacing:.03em}
+.cert-date{font-size:.75rem;color:var(--muted)}
+.cert-link{
+  display:inline-flex;align-items:center;gap:.3rem;
+  font-size:.75rem;color:var(--accent);text-decoration:none;
+  margin-top:.6rem;transition:gap .2s;font-family:'DM Mono',monospace;
+}
+.cert-link:hover{gap:.5rem}
+
+/* ===== CONTACT ===== */
+.contact-wrap{display:grid;grid-template-columns:1fr 1.2fr;gap:5rem;align-items:start}
+.contact-lead{font-size:1.5rem;font-family:'Syne',sans-serif;font-weight:700;margin-bottom:1rem;line-height:1.3}
+.contact-sub{color:var(--muted);line-height:1.9;margin-bottom:2rem;font-size:.95rem}
+.contact-items{display:flex;flex-direction:column;gap:.75rem}
+.contact-item{
+  display:flex;align-items:center;gap:.85rem;
+  color:var(--muted);text-decoration:none;font-size:.9rem;
+  transition:color .2s;
+}
+.contact-item:hover{color:var(--text)}
+.c-icon{
+  width:38px;height:38px;background:var(--surface2);
+  border:1px solid var(--border);border-radius:9px;
+  display:flex;align-items:center;justify-content:center;font-size:.95rem;
+  flex-shrink:0;transition:border-color .2s;
+}
+.contact-item:hover .c-icon{border-color:rgba(59,130,246,.3)}
+
+/* Form kontak */
+.contact-form{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:18px;padding:2rem;
+}
+.form-group{margin-bottom:1.25rem}
+.form-label{
+  display:block;font-size:.72rem;color:var(--muted);
+  margin-bottom:.45rem;font-family:'DM Mono',monospace;
+  letter-spacing:.06em;text-transform:uppercase;
+}
+.form-input{
+  width:100%;background:var(--surface2);
+  border:1px solid var(--border);color:var(--text);
+  padding:.7rem 1rem;border-radius:8px;
+  font-family:'DM Sans',sans-serif;font-size:.9rem;
+  transition:border-color .2s;outline:none;
+}
+.form-input:focus{border-color:rgba(59,130,246,.5);background:rgba(59,130,246,.03)}
+.form-input::placeholder{color:var(--muted)}
+textarea.form-input{height:120px;resize:vertical}
+
+/* ===== FOOTER ===== */
+footer{
+  border-top:1px solid var(--border);
+  padding:2rem;text-align:center;
+  color:var(--muted);font-size:.78rem;
+  font-family:'DM Mono',monospace;
+  position:relative;z-index:1;
+  letter-spacing:.04em;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  .about-grid,.proj-grid,.certs-grid,.contact-wrap{grid-template-columns:1fr}
+  .hero-avatar-col{display:none}
+  .skills-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+  .nav-links{display:none}
+  .hero-stats{gap:2rem}
+  .hero-name{font-size:clamp(3rem,14vw,5rem)}
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- Efek cahaya background -->
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<!-- ============================================================
+  NAVBAR
+  - Logo: ganti "RASYD" dan "DEV" sesuai brand kamu
+  - Link menu: kalau ganti nama section, sesuaikan href="#..." nya
+============================================================ -->
+<nav>
+  <a href="#" class="logo">RASYD<span class="dot">.</span>DEV</a>
+
+  <ul class="nav-links">
+    <li><a href="#about"      data-key="about">Tentang</a></li>
+    <li><a href="#skills"     data-key="skills">Keahlian</a></li>
+    <li><a href="#experience" data-key="experience">Pengalaman</a></li>
+    <li><a href="#projects"   data-key="projects">Proyek</a></li>
+    <li><a href="#contact"    data-key="contact">Kontak</a></li>
+  </ul>
+
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('id')">ID</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+  </div>
+</nav>
+
+
+<!-- ============================================================
+  SECTION 01 — HERO
+  Yang perlu diubah:
+  1. Nama besar (.hero-name) → ganti "RASYD" & "AZRON"
+  2. Badge atas → ganti teks jabatan (misal: "Backend Developer")
+  3. Deskripsi → ubah di bagian translations JS (key: heroDesc)
+  4. Foto profil → cari komentar FOTO PROFIL di bawah
+  5. Statistik (50+, 20+, 5+) → sesuaikan angkanya
+============================================================ -->
+<section id="home">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:center">
+
+      <div>
+        <!-- Badge jabatan — ganti teks di sini -->
+        <div class="hero-tag">Full Stack Developer</div>
+
+        <!-- Nama besar — ganti RASYD dan AZRON -->
+        <h1 class="hero-name">
+          <div class="filled">RASYD</div>
+          <div class="outline">AZRON</div>
+        </h1>
+
+        <!-- Deskripsi singkat — ubah di JS translations (key: heroDesc) -->
+        <p class="hero-desc" data-key="heroDesc">
+          Membangun aplikasi web modern, scalable, dan berperforma tinggi menggunakan Laravel, Alpine.js, dan Bootstrap.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#projects" class="btn-primary" data-key="viewProjects">Lihat Proyek</a>
+          <a href="#contact"  class="btn-ghost"   data-key="contactMe">Hubungi Saya</a>
+        </div>
+
+        <!-- Statistik — ganti angka sesuai pencapaian kamu -->
+        <div class="hero-stats">
+          <div>
+            <div class="stat-num">50+</div>
+            <div class="stat-label" data-key="projectsLabel">Proyek</div>
+          </div>
+          <div>
+            <div class="stat-num">20+</div>
+            <div class="stat-label" data-key="clientsLabel">Klien</div>
+          </div>
+          <div>
+            <div class="stat-num">5+</div>
+            <div class="stat-label" data-key="yearsLabel">Tahun Exp.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================
+        FOTO PROFIL
+        Ganti src="https://i.pravatar.cc/..." dengan foto kamu sendiri
+        Contoh lokal : src="foto.jpg"
+        Contoh URL   : src="https://github.com/namakamu.png"
+      ============================================================ -->
+      <div class="hero-avatar-col avatar-wrap">
+        <div class="avatar-ring">
+          <img src="https://i.pravatar.cc/500?img=11" alt="Rasyd Azron — Profile Photo"/>
+        </div>
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+  SECTION 02 — TENTANG SAYA
+  Yang perlu diubah:
+  1. Paragraf about → ubah di JS translations (key: aboutText1, aboutText2)
+  2. Tech pills → tambah/hapus <span class="pill"> sesuai tech stack kamu
+  3. Angka statistik di kotak kanan
+============================================================ -->
+<section id="about">
+  <div class="container">
+    <div class="section-eyebrow">// 01</div>
+    <h2 class="section-title" data-key="aboutMe">Tentang Saya</h2>
+
+    <div class="about-grid reveal">
+      <div class="about-text">
+        <p class="about-lead" data-key="passionateWebDeveloper">Web Developer Bersemangat</p>
+        <p data-key="aboutText1">Saya fokus pada pengembangan aplikasi web modern menggunakan Laravel, Alpine.js, Bootstrap dan MySQL.</p>
+        <p data-key="aboutText2">Suka clean architecture, UI modern dan performa aplikasi yang optimal.</p>
+
+        <!-- Tech stack pills — tambah/hapus sesuai skill kamu -->
+        <div class="tech-pills">
+          <span class="pill">Laravel</span>
+          <span class="pill">Alpine.js</span>
+          <span class="pill">Bootstrap</span>
+          <span class="pill">MySQL</span>
+          <span class="pill">RESTful API</span>
+          <span class="pill">PHP</span>
+          <span class="pill">Git</span>
+          <span class="pill">Linux</span>
+        </div>
+      </div>
+
+      <!-- Statistik kanan — sesuaikan angka -->
+      <div class="stats-box">
+        <div class="stat-box-item">
+          <div class="stat-box-num">50+</div>
+          <div class="stat-box-label" data-key="projectsLabel">Proyek</div>
+        </div>
+        <div class="stat-box-item">
+          <div class="stat-box-num">20+</div>
+          <div class="stat-box-label" data-key="clientsLabel">Klien</div>
+        </div>
+        <div class="stat-box-item">
+          <div class="stat-box-num">5+</div>
+          <div class="stat-box-label" data-key="yearsLabel">Tahun Exp.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+  SECTION 03 — KEAHLIAN
+  Yang perlu diubah:
+  - Tambah/hapus .skill-chip sesuai skill kamu
+  - Ubah emoji icon, nama skill, dan persentase
+  - Ubah width di style="width:XX%" sesuai level kemampuan
+============================================================ -->
+<section id="skills">
+  <div class="container">
+    <div class="section-eyebrow">// 02</div>
+    <h2 class="section-title" data-key="skillsLabel">Keahlian</h2>
+
+    <div class="skills-grid reveal">
+
+      <!-- Format: icon emoji | nama | level % | bar width -->
+      <div class="skill-chip">
+        <span class="sk-icon">🔥</span>
+        <div class="sk-name">Laravel</div>
+        <div class="sk-level">95%</div>
+        <div class="sk-bar"><div class="sk-fill" style="width:95%"></div></div>
+      </div>
+
+      <div class="skill-chip">
+        <span class="sk-icon">🎨</span>
+        <div class="sk-name">Bootstrap</div>
+        <div class="sk-level">90%</div>
+        <div class="sk-bar"><div class="sk-fill" style="width:90%"></div></div>
+      </div>
+
+      <div class="skill-chip">
+        <span class="sk-icon">⚡</span>
+        <div class="sk-name">Alpine.js</div>
+        <div class="sk-level">85%</div>
+        <div class="sk-bar"><div class="sk-fill" style="width:85%"></div></div>
+      </div>
+
+      <div class="skill-chip">
+        <span class="sk-icon">🗄️</span>
+        <div class="sk-name">MySQL</div>
+        <div class="sk-level">88%</div>
+        <div class="sk-bar"><div class="sk-fill" style="width:88%"></div></div>
+      </div>
+
+      <div class="skill-chip">
+        <span class="sk-icon">🐘</span>
+        <div class="sk-name">PHP</div>
+        <div class="sk-level">92%</div>
+        <div class="sk-bar"><div class="sk-fill" style="width:92%"></div></div>
+      </div>
+
+      <div class="skill-chip">
+        <span class="sk-icon">🔗</span>
+        <div class="sk-name">REST API</div>
+        <div class="sk-level">90%</div>
+        <div class="sk-bar"><div class="sk-fill" style="width:90%"></div></div>
+      </div>
+
+      <div class="skill-chip">
+        <span class="sk-icon">🎯</span>
+        <div class="sk-name">HTML / CSS</div>
+        <div class="sk-level">95%</div>
+        <div class="sk-bar"><div class="sk-fill" style="width:95%"></div></div>
+      </div>
+
+      <div class="skill-chip">
+        <span class="sk-icon">🚀</span>
+        <div class="sk-name">Git / GitHub</div>
+        <div class="sk-level">85%</div>
+        <div class="sk-bar"><div class="sk-fill" style="width:85%"></div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+  SECTION 04 — PENGALAMAN KERJA
+  Yang perlu diubah per item:
+  - Period (tahun)
+  - Jabatan (.tl-title)
+  - Nama perusahaan (.tl-company)
+  - Deskripsi (.tl-desc) — atau lewat JS translations
+  - Tech tags
+  Tambah .tl-item baru untuk pengalaman tambahan
+============================================================ -->
+<section id="experience">
+  <div class="container">
+    <div class="section-eyebrow">// 03</div>
+    <h2 class="section-title" data-key="experienceLabel">Pengalaman</h2>
+
+    <div class="timeline">
+
+      <!-- Pengalaman 1 — terbaru -->
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-period">2022 — Present</div>                          <!-- Ubah periode -->
+        <div class="tl-title" data-key="seniorLaravelDeveloper">Senior Laravel Developer</div>
+        <div class="tl-company" data-key="techStartupIndonesia">Tech Startup Indonesia</div>
+        <p class="tl-desc" data-key="seniorLaravelDesc">
+          Mengembangkan dan memelihara aplikasi web menggunakan Laravel, Alpine.js, dan MySQL. Memimpin tim 3 developer.
+        </p>
+        <div class="tags">                                                    <!-- Ubah tech tags -->
+          <span class="tag">Laravel</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">Alpine.js</span>
+          <span class="tag">Leadership</span>
+        </div>
+      </div>
+
+      <!-- Pengalaman 2 -->
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-period">2020 — 2022</div>
+        <div class="tl-title" data-key="laravelDeveloper">Laravel Developer</div>
+        <div class="tl-company" data-key="digitalAgencyXYZ">Digital Agency XYZ</div>
+        <p class="tl-desc" data-key="laravelDeveloperDesc">
+          Mengembangkan solusi web kustom untuk berbagai klien. Menerapkan RESTful API dan UI responsif.
+        </p>
+        <div class="tags">
+          <span class="tag">Laravel</span>
+          <span class="tag">Bootstrap</span>
+          <span class="tag">REST API</span>
+        </div>
+      </div>
+
+      <!-- Pengalaman 3 — terlama -->
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-period">2019 — 2020</div>
+        <div class="tl-title" data-key="juniorWebDeveloper">Junior Web Developer</div>
+        <div class="tl-company" data-key="webDevelopmentStudio">Web Development Studio</div>
+        <p class="tl-desc" data-key="juniorWebDeveloperDesc">
+          Memulai karier dengan membangun situs statis dan dinamis. Belajar Laravel, MySQL, dan teknologi front-end.
+        </p>
+        <div class="tags">
+          <span class="tag">HTML/CSS</span>
+          <span class="tag">PHP</span>
+          <span class="tag">MySQL</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+  SECTION 05 — PROYEK
+  Yang perlu diubah per card:
+  - Judul proyek (.proj-title)
+  - Deskripsi (.proj-desc) — atau lewat JS translations
+  - href di link ↗ (demo) dan ⌥ (GitHub)
+  - Tech tags
+  Tambah .proj-card baru untuk proyek tambahan
+============================================================ -->
+<section id="projects">
+  <div class="container">
+    <div class="section-eyebrow">// 04</div>
+    <h2 class="section-title" data-key="projects">Proyek</h2>
+
+    <div class="proj-grid">
+
+      <!-- Proyek 1 -->
+      <div class="proj-card reveal">
+        <div class="proj-top">
+          <div class="proj-title" data-key="eCommercePlatform">Platform E-Commerce</div>
+          <div class="proj-links">
+            <a href="#" title="Live Demo">↗</a>             <!-- Ganti # dengan URL demo -->
+            <a href="#" title="GitHub Repo">⌥</a>           <!-- Ganti # dengan URL repo -->
+          </div>
+        </div>
+        <p class="proj-desc" data-key="eCommerceDesc">
+          Platform e-commerce lengkap dengan integrasi pembayaran, keranjang belanja, dan dashboard admin.
+        </p>
+        <div class="tags">
+          <span class="tag">Laravel 9</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">Stripe</span>
+          <span class="tag">Bootstrap 5</span>
+        </div>
+      </div>
+
+      <!-- Proyek 2 -->
+      <div class="proj-card reveal">
+        <div class="proj-top">
+          <div class="proj-title" data-key="taskManagementApp">Aplikasi Manajemen Tugas</div>
+          <div class="proj-links">
+            <a href="#" title="Live Demo">↗</a>
+            <a href="#" title="GitHub Repo">⌥</a>
+          </div>
+        </div>
+        <p class="proj-desc" data-key="taskManagementDesc">
+          Aplikasi manajemen tugas real-time dengan fitur kolaboratif, notifikasi, dan manajemen tim.
+        </p>
+        <div class="tags">
+          <span class="tag">Laravel 10</span>
+          <span class="tag">Alpine.js</span>
+          <span class="tag">WebSocket</span>
+          <span class="tag">PostgreSQL</span>
+        </div>
+      </div>
+
+      <!-- Proyek 3 -->
+      <div class="proj-card reveal">
+        <div class="proj-top">
+          <div class="proj-title" data-key="analyticsDashboard">Dashboard Analytics</div>
+          <div class="proj-links">
+            <a href="#" title="Live Demo">↗</a>
+            <a href="#" title="GitHub Repo">⌥</a>
+          </div>
+        </div>
+        <p class="proj-desc" data-key="analyticsDesc">
+          Dashboard analytics bisnis dengan visualisasi data real-time, chart, dan export laporan.
+        </p>
+        <div class="tags">
+          <span class="tag">Laravel</span>
+          <span class="tag">Chart.js</span>
+          <span class="tag">API</span>
+          <span class="tag">PDF Export</span>
+        </div>
+      </div>
+
+      <!-- Proyek 4 -->
+      <div class="proj-card reveal">
+        <div class="proj-top">
+          <div class="proj-title" data-key="cmsPlatform">Platform CMS</div>
+          <div class="proj-links">
+            <a href="#" title="Live Demo">↗</a>
+            <a href="#" title="GitHub Repo">⌥</a>
+          </div>
+        </div>
+        <p class="proj-desc" data-key="cmsDesc">
+          Sistem manajemen konten dengan media library, optimasi SEO, dan dukungan multi-bahasa.
+        </p>
+        <div class="tags">
+          <span class="tag">Laravel</span>
+          <span class="tag">Eloquent ORM</span>
+          <span class="tag">File Upload</span>
+          <span class="tag">i18n</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+  SECTION 06 — PENDIDIKAN & SERTIFIKAT
+  Yang perlu diubah per card:
+  - Emoji icon
+  - Judul (.cert-title)
+  - Nama lembaga (.cert-issuer)
+  - Tanggal (.cert-date)
+  - href di "Lihat Sertifikat" → ganti # dengan URL sertifikat
+============================================================ -->
+<section id="certificates">
+  <div class="container">
+    <div class="section-eyebrow">// 05</div>
+    <h2 class="section-title" data-key="educationCertificates">Pendidikan & Sertifikat</h2>
+
+    <div class="certs-grid">
+
+      <!-- Sertifikat 1 -->
+      <div class="cert-card reveal">
+        <div class="cert-icon">🏅</div>
+        <div>
+          <div class="cert-title" data-key="laravelFrameworkMaster">Master Laravel Framework</div>
+          <div class="cert-issuer">Laravel Academy</div>         <!-- Nama lembaga -->
+          <div class="cert-date" data-key="certDate1">Dikeluarkan: Juni 2023</div>
+          <a href="#" class="cert-link" data-key="viewCertificate">Lihat Sertifikat →</a>  <!-- Ganti # -->
+        </div>
+      </div>
+
+      <!-- Sertifikat 2 -->
+      <div class="cert-card reveal">
+        <div class="cert-icon">💻</div>
+        <div>
+          <div class="cert-title" data-key="fullStackWebDevelopment">Full Stack Web Development</div>
+          <div class="cert-issuer">Udemy</div>
+          <div class="cert-date" data-key="certDate2">Dikeluarkan: Maret 2022</div>
+          <a href="#" class="cert-link" data-key="viewCertificate">Lihat Sertifikat →</a>
+        </div>
+      </div>
+
+      <!-- Pendidikan formal -->
+      <div class="cert-card reveal">
+        <div class="cert-icon">🎓</div>
+        <div>
+          <div class="cert-title" data-key="bachelorIT">Bachelor Teknologi Informasi</div>
+          <div class="cert-issuer">State University</div>       <!-- Ganti nama universitasmu -->
+          <div class="cert-date" data-key="certDate3">Lulus: Juni 2019</div>
+          <a href="#" class="cert-link" data-key="viewDiploma">Lihat Diploma →</a>
+        </div>
+      </div>
+
+      <!-- Sertifikat 4 -->
+      <div class="cert-card reveal">
+        <div class="cert-icon">🗄️</div>
+        <div>
+          <div class="cert-title" data-key="mysqlDatabaseSpecialist">MySQL Database Specialist</div>
+          <div class="cert-issuer">Oracle Academy</div>
+          <div class="cert-date" data-key="certDate4">Dikeluarkan: September 2021</div>
+          <a href="#" class="cert-link" data-key="viewCertificate">Lihat Sertifikat →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+  SECTION 07 — KONTAK
+  Yang perlu diubah:
+  1. Email → ganti "rasyd@email.com" (2 tempat: href dan teks)
+  2. Nomor HP → ganti "+62 812 3456 7890"
+  3. Lokasi → ganti "Indonesia" jadi kota spesifik kalau mau
+  4. href LinkedIn → ganti "#" dengan URL LinkedIn kamu
+  5. href GitHub  → ganti "#" dengan URL GitHub kamu
+============================================================ -->
+<section id="contact">
+  <div class="container">
+    <div class="section-eyebrow">// 06</div>
+    <h2 class="section-title" data-key="getInTouch">Hubungi Saya</h2>
+
+    <div class="contact-wrap reveal">
+
+      <!-- Info kontak kiri -->
+      <div>
+        <div class="contact-lead" data-key="sendMessage">Kirim Saya Pesan</div>
+        <p class="contact-sub" data-key="openForFreelance">
+          Terbuka untuk proyek freelance dan kolaborasi. Jangan ragu untuk menghubungi!
+        </p>
+
+        <div class="contact-items">
+          <!-- Ganti email -->
+          <a href="mailto:rasyd@email.com" class="contact-item">
+            <div class="c-icon">📧</div>
+            <span>rasyd@email.com</span>
+          </a>
+
+          <!-- Ganti nomor HP -->
+          <a href="tel:+6281234567890" class="contact-item">
+            <div class="c-icon">📱</div>
+            <span>+62 812 3456 7890</span>
+          </a>
+
+          <!-- Lokasi -->
+          <div class="contact-item">
+            <div class="c-icon">📍</div>
+            <span>Indonesia</span>         <!-- Ganti kota kalau mau -->
+          </div>
+
+          <!-- Ganti href dengan URL LinkedIn kamu -->
+          <a href="#" class="contact-item">
+            <div class="c-icon">💼</div>
+            <span>linkedin.com/in/rasydazron</span>
+          </a>
+
+          <!-- Ganti href dengan URL GitHub kamu -->
+          <a href="#" class="contact-item">
+            <div class="c-icon">🐙</div>
+            <span>github.com/rasydazron</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Form kontak kanan -->
+      <div class="contact-form">
+        <div class="form-group">
+          <label class="form-label" data-key="fullName">NAMA LENGKAP</label>
+          <input type="text" class="form-input" placeholder="Nama Anda" data-placeholder-key="yourName"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-key="emailAddress">ALAMAT EMAIL</label>
+          <input type="email" class="form-input" placeholder="Email Anda" data-placeholder-key="yourEmail"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-key="subject">SUBJEK</label>
+          <input type="text" class="form-input" placeholder="Subjek pesan" data-placeholder-key="messageSubject"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-key="message">PESAN</label>
+          <textarea class="form-input" placeholder="Pesan Anda..." data-placeholder-key="yourMessage"></textarea>
+        </div>
+        <button class="btn-primary" style="width:100%" onclick="handleSend()" data-key="sendMsg">
+          Kirim Pesan
+        </button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+  FOOTER — ganti nama & tahun kalau perlu
+============================================================ -->
+<footer>
+  <span data-key="footerText">© 2024 Rasyd Azron — All rights reserved.</span>
+</footer>
+
+
+<!-- ============================================================
+  JAVASCRIPT
+  Bagian yang bisa diubah:
+  1. translations.id & translations.en → semua teks konten bilingual
+  2. setLang() → tidak perlu diubah
+  3. handleSend() → kalau mau connect ke backend/email service
+============================================================ -->
+<script>
+// ============================================================
+// TRANSLATIONS — ubah value string sesuai konten kamu
+// "id" = teks Bahasa Indonesia, "en" = teks English
+// ============================================================
+const translations = {
+  id: {
+    about:'Tentang', skills:'Keahlian', experience:'Pengalaman',
+    projects:'Proyek', contact:'Kontak',
+    heroDesc:'Membangun aplikasi web modern, scalable, dan berperforma tinggi menggunakan Laravel, Alpine.js, dan Bootstrap.',
+    viewProjects:'Lihat Proyek', contactMe:'Hubungi Saya',
+    projectsLabel:'Proyek', clientsLabel:'Klien', yearsLabel:'Tahun Exp.',
+    aboutMe:'Tentang Saya',
+    passionateWebDeveloper:'Web Developer Bersemangat',
+    aboutText1:'Saya fokus pada pengembangan aplikasi web modern menggunakan Laravel, Alpine.js, Bootstrap dan MySQL.',
+    aboutText2:'Suka clean architecture, UI modern dan performa aplikasi yang optimal.',
+    skillsLabel:'Keahlian', experienceLabel:'Pengalaman',
+    seniorLaravelDeveloper:'Senior Laravel Developer',
+    techStartupIndonesia:'Tech Startup Indonesia',
+    seniorLaravelDesc:'Mengembangkan dan memelihara aplikasi web menggunakan Laravel, Alpine.js, dan MySQL. Memimpin tim 3 developer.',
+    laravelDeveloper:'Laravel Developer',
+    digitalAgencyXYZ:'Digital Agency XYZ',
+    laravelDeveloperDesc:'Mengembangkan solusi web kustom untuk berbagai klien. Menerapkan RESTful API dan UI responsif.',
+    juniorWebDeveloper:'Junior Web Developer',
+    webDevelopmentStudio:'Web Development Studio',
+    juniorWebDeveloperDesc:'Memulai karier dengan membangun situs statis dan dinamis. Belajar Laravel, MySQL, dan teknologi front-end.',
+    eCommercePlatform:'Platform E-Commerce',
+    eCommerceDesc:'Platform e-commerce lengkap dengan integrasi pembayaran, keranjang belanja, dan dashboard admin.',
+    taskManagementApp:'Aplikasi Manajemen Tugas',
+    taskManagementDesc:'Aplikasi manajemen tugas real-time dengan fitur kolaboratif, notifikasi, dan manajemen tim.',
+    analyticsDashboard:'Dashboard Analytics',
+    analyticsDesc:'Dashboard analytics bisnis dengan visualisasi data real-time, chart, dan export laporan.',
+    cmsPlatform:'Platform CMS',
+    cmsDesc:'Sistem manajemen konten dengan media library, optimasi SEO, dan dukungan multi-bahasa.',
+    educationCertificates:'Pendidikan & Sertifikat',
+    laravelFrameworkMaster:'Master Laravel Framework',
+    fullStackWebDevelopment:'Full Stack Web Development',
+    bachelorIT:'Bachelor Teknologi Informasi',
+    mysqlDatabaseSpecialist:'MySQL Database Specialist',
+    viewCertificate:'Lihat Sertifikat →', viewDiploma:'Lihat Diploma →',
+    certDate1:'Dikeluarkan: Juni 2023',
+    certDate2:'Dikeluarkan: Maret 2022',
+    certDate3:'Lulus: Juni 2019',
+    certDate4:'Dikeluarkan: September 2021',
+    getInTouch:'Hubungi Saya',
+    sendMessage:'Kirim Saya Pesan',
+    openForFreelance:'Terbuka untuk proyek freelance dan kolaborasi. Jangan ragu untuk menghubungi!',
+    fullName:'NAMA LENGKAP', emailAddress:'ALAMAT EMAIL',
+    subject:'SUBJEK', message:'PESAN', sendMsg:'Kirim Pesan',
+    yourName:'Nama Anda', yourEmail:'Email Anda',
+    messageSubject:'Subjek pesan', yourMessage:'Pesan Anda...',
+    footerText:'© 2024 Rasyd Azron — Semua hak dilindungi.'
+  },
+  en: {
+    about:'About', skills:'Skills', experience:'Experience',
+    projects:'Projects', contact:'Contact',
+    heroDesc:'Building modern, scalable, and high-performance web applications using Laravel, Alpine.js, and Bootstrap.',
+    viewProjects:'View Projects', contactMe:'Contact Me',
+    projectsLabel:'Projects', clientsLabel:'Clients', yearsLabel:'Years Exp.',
+    aboutMe:'About Me',
+    passionateWebDeveloper:'Passionate Web Developer',
+    aboutText1:'I focus on developing modern web applications using Laravel, Alpine.js, Bootstrap and MySQL.',
+    aboutText2:'I love clean architecture, modern UI and optimal application performance.',
+    skillsLabel:'Skills', experienceLabel:'Experience',
+    seniorLaravelDeveloper:'Senior Laravel Developer',
+    techStartupIndonesia:'Tech Startup Indonesia',
+    seniorLaravelDesc:'Developing and maintaining web applications using Laravel, Alpine.js, and MySQL. Leading team of 3 developers.',
+    laravelDeveloper:'Laravel Developer',
+    digitalAgencyXYZ:'Digital Agency XYZ',
+    laravelDeveloperDesc:'Developed custom web solutions for various clients. Implemented RESTful APIs and responsive UIs.',
+    juniorWebDeveloper:'Junior Web Developer',
+    webDevelopmentStudio:'Web Development Studio',
+    juniorWebDeveloperDesc:'Started career building static and dynamic websites. Learned Laravel, MySQL and front-end technologies.',
+    eCommercePlatform:'E-Commerce Platform',
+    eCommerceDesc:'Full-stack e-commerce platform with payment integration, shopping cart, and admin dashboard.',
+    taskManagementApp:'Task Management App',
+    taskManagementDesc:'Real-time task management with collaborative features, notifications, and team management.',
+    analyticsDashboard:'Analytics Dashboard',
+    analyticsDesc:'Business analytics dashboard with real-time data visualization, charts, and reports export.',
+    cmsPlatform:'CMS Platform',
+    cmsDesc:'Content management system with media library, SEO optimization, and multi-language support.',
+    educationCertificates:'Education & Certificates',
+    laravelFrameworkMaster:'Laravel Framework Master',
+    fullStackWebDevelopment:'Full Stack Web Development',
+    bachelorIT:'Bachelor of Information Technology',
+    mysqlDatabaseSpecialist:'MySQL Database Specialist',
+    viewCertificate:'View Certificate →', viewDiploma:'View Diploma →',
+    certDate1:'Issued: June 2023',
+    certDate2:'Issued: March 2022',
+    certDate3:'Graduated: June 2019',
+    certDate4:'Issued: September 2021',
+    getInTouch:'Get In Touch',
+    sendMessage:'Send Me a Message',
+    openForFreelance:'Open for freelance projects and collaborations. Feel free to reach out!',
+    fullName:'FULL NAME', emailAddress:'EMAIL ADDRESS',
+    subject:'SUBJECT', message:'MESSAGE', sendMsg:'Send Message',
+    yourName:'Your name', yourEmail:'Your email',
+    messageSubject:'Message subject', yourMessage:'Your message...',
+    footerText:'© 2024 Rasyd Azron — All rights reserved.'
+  }
+};
+
+let currentLang = 'id';
+
+function setLang(lang) {
+  currentLang = lang;
+  // Toggle active state tombol
+  document.querySelectorAll('.lang-btn').forEach((b,i) => {
+    b.classList.toggle('active', ['id','en'][i] === lang);
+  });
+  const t = translations[lang];
+  // Update semua elemen dengan data-key
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const key = el.getAttribute('data-key');
+    if(t[key]) el.textContent = t[key];
+  });
+  // Update placeholder input
+  document.querySelectorAll('[data-placeholder-key]').forEach(el => {
+    const key = el.getAttribute('data-placeholder-key');
+    if(t[key]) el.placeholder = t[key];
+  });
+}
+
+// ============================================================
+// FORM SUBMIT — saat ini cuma alert
+// Kalau mau kirim email beneran, integrasikan dengan:
+// - Formspree  : fetch('https://formspree.io/f/YOUR_ID', ...)
+// - EmailJS    : emailjs.send(...)
+// - Backend API: fetch('/api/contact', ...)
+// ============================================================
+function handleSend() {
+  const t = translations[currentLang];
+  alert('✅ ' + (t.contactSuccess || 'Pesan berhasil dikirim!'));
+}
+
+// Reveal animation on scroll
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
